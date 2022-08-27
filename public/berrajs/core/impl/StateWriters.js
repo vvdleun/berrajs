@@ -6,10 +6,10 @@ export class GlobalStateWriter {
     }
 
     setActiveRoomId(roomId) {
-        this.state.roomId = roomId;
+        this.#state.roomId = roomId;
     }
 
     setScore(points) {
-        this.state.score = points;
+        this.#state.score = points;
     }
 }

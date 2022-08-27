@@ -1,28 +1,57 @@
 import { GameSession } from "./core/GameSession.js";
+import { OutputHandler } from "./OutputHandler";
+
+// Routes output events to all subscribed handlers 
+class OutputHandlerRouter extends OutputHandler {
+    #outputHandlers = [];
+
+    constructor(outputHandlers) {
+        super();
+        this.#outputHandlers = outputHandlers;
+    }
+
+    printLine(line) {
+        this.#routeToSubscribers(h => h({ "event": "printLine", "value": line }));
+    }
+
+    printBold(line) {
+        this.#routeToSubscribers(h => h({ "event": "printBold", "value": line }));
+    }
+
+    print(line) {
+        this.#routeToSubscribers(h => h({ "event": "print", "value": line }));
+    }
+
+    updateActions(actions) {
+        this.#routeToSubscribers(h => h({ "event": "updateActions", "value": actions }));
+    }
+
+    #routeToSubscribers(cb) {
+        this.#outputHandlers.forEach(h => {
+            cb(h);
+        });
+    }
+}
 
 export class BerraEngine {
-    static start(game) {
-        const state = {
-            "version": 0,       // Version of this structure
-            "score": 0,         // Current score
-            "rooms": {},        // State of individual rooms (if room manipulates state)
-            "objects": {},      // State of individual objects (if object manipulates state)
-            "roomId": null      // Active room
-        }
+    #outputHandlers = [];
 
-        const session = new GameSession(game, state);
-        session.startNewGame();
+    subscribeOutputHandler(handler) {
+        this.#outputHandlers.push(handler);
+    }
+
+    unsubscribeOutputHandler(handler) {
+        this.#outputHandlers = this.#outputHandlers
+            .filter(h => h !== handler)
+    }
+    
+    start(game) {
+        const outputHandler = new OutputHandlerRouter(this.#outputHandlers);
+
+        const session = new GameSession(game, outputHandler);
+
+        session.resetGame();
 
         return session;
     }
-
-
-    // static start(game) {
-    //     const state = BerraEngine.#resetState();
-
-    //     // const session = new GameSession(game, state);
-    //     // session.startNewGame();
-
-    //     // return session;
-    // }
 } 

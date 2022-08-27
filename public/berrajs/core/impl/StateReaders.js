@@ -5,7 +5,7 @@ export class GlobalStateReader {
         this.state = state;
     }
 
-    activeRoomId() {
+    roomId() {
         return this.state.roomId;
     }
 

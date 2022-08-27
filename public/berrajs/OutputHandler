@@ -1,0 +1,17 @@
+export class OutputHandler {
+    printLine(line) {
+        throw "This method must be re-implemented by a child-class";
+    }
+
+    print(line) {
+        throw "This method must be re-implemented by a child-class";
+    }
+
+    printBold(line) {
+        throw "This method must be re-implemented by a child-class";
+    }
+
+    updateActions(actions) {
+        throw "This method must be re-implemented by a child-class";
+    }
+}

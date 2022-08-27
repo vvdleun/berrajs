@@ -119,4 +119,4 @@ export class GameObject {
     useObjectAfter(usedObject) {
         return [];
     }
-} t
+}

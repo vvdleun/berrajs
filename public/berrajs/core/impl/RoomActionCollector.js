@@ -23,7 +23,7 @@ export class RoomActionCollector {
                 "name": "Use",
                 "objects": []
             },
-        }
+        };
 
         room.objects().forEach(o => {
             const receiverObject = {
@@ -48,7 +48,7 @@ export class RoomActionCollector {
 
         // Remove unavailable actions
         Object.entries(actions)
-            .filter(item[1].length === 0)
+            .filter(item => item[1].length === 0)
             .forEach(item => {
                 delete actions[item];
             });

@@ -1,4 +1,4 @@
-import { StateReader } from "../state/StateReaders";
+import { StateReader } from "./impl/StateReaders";
 
 export class Room {
     static localObjectsId = "#objects";
