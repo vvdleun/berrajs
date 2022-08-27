@@ -3,13 +3,13 @@ import { Event } from "../core/Event.js";
 export class SetActiveRoomEvent extends Event {
     constructor(fromRoomId, toRoomId) {
         super(
-            (mutableState) => {
+            (mutator) => {
                 // Do action
-                mutableState.setActiveRoom(toRoomId);
+                mutator.setActiveRoom(toRoomId);
             },
-            (mutableState) => {
+            (mutator) => {
                 // Undo action
-                mutableState.setActiveRoom(fromRoomId);
+                mutator.setActiveRoom(fromRoomId);
             }
         )
     }

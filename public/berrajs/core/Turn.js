@@ -1,4 +1,4 @@
-import { MutableState } from "./MutableState";
+import { Mutator } from "./Mutator";
 
 export class Turn {
     #events = [];

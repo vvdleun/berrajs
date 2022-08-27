@@ -18,13 +18,15 @@ export class GameObject {
     }
 
     walkBefore() {
-        return false;
+        return [];
     }
 
     walk() {
+        return [];
     }
     
     walkAfter() {
+        return [];
     }
 
     // EXAMINE
@@ -34,14 +36,15 @@ export class GameObject {
     }
 
     examineBefore() {
-        return false;
+        return [];
     }
 
     examine() {
-        return null;
+        return [];
     }
 
     examineAfter() {
+        return [];
     }
 
     // TALK
@@ -51,33 +54,33 @@ export class GameObject {
     }
 
     talkBefore() {
-        return false;
+        return [];
     }
 
     talk() {
-
+        return [];
     }
 
     talkAfter() {
-
+        return [];
     }
 
     // PICK UP
 
     pickable() {
-
-    }
-
-    pickedUpBefore() {
         return false;
     }
 
-    pickedUp() {
+    pickedUpBefore() {
+        return [];
+    }
 
+    pickedUp() {
+        return [];
     }
 
     pickedUpAfter() {
-        
+        return [];   
     }
 
     // USE OBJECT X ON Y
@@ -88,15 +91,15 @@ export class GameObject {
     }
 
     usedBefore(usedObject) {
-        return false;
+        return [];
     }
 
     used(usedObject) {
-        return false;
+        return [];
     }
 
     usedAfter(usedObject) {
-
+        return [];
     }
 
     // Given object is used on this object
@@ -106,7 +109,7 @@ export class GameObject {
     }
 
      useObjectBefore(usedObject) {
-        return false;
+        return [];
     }
 
     useObject(usedObject) {
@@ -114,13 +117,6 @@ export class GameObject {
     }
 
     useObjectAfter(usedObject) {
+        return [];
     }
-
-    subscribesToTurns() {
-        return false;
-    }
-
-    compute(state) {
-
-    }
-}
+} t

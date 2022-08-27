@@ -34,9 +34,6 @@ export class Room {
     }
 
     objects() {
-        if(this.#stateReader.hasLocalRoomState(Room.localObjectsId)) {
-            return this.#stateReader.localRoomState(Room.localObjectsId);
-        }
         return [...this.#objects];
     }
 }

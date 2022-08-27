@@ -1,6 +1,6 @@
 import { Event } from "../core/Event";
 
-export class ShowMessageEvent extends Event {
+export class PrintLineEvent extends Event {
     constructor(msg) {
         super(
             (mutableState) => {
@@ -9,7 +9,7 @@ export class ShowMessageEvent extends Event {
                 
             },
             (mutableState) => {
-                // No undo action
+                // No undo action for PrintLine...
             }
         )
     }

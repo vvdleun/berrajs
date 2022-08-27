@@ -1,8 +1,16 @@
-export class GlobalStateaReader {
+export class GlobalStateReader {
     state;
 
     constructor(state) {
         this.state = state;
+    }
+
+    activeRoomId() {
+        return this.state.roomId;
+    }
+
+    score() {
+        return this.state.score;
     }
 
     roomState(id, key) {
@@ -22,7 +30,7 @@ export class GlobalStateaReader {
     }
 }
 
-export class StateReader extends GlobalStateaReader {
+export class StateReader extends GlobalStateReader {
     id;
 
     constructor(state, id) {
