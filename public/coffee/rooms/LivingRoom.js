@@ -2,10 +2,12 @@ import { Room } from "../../berrajs/core/Room";
 import { Exit, SOUTH } from "../../berrajs/objects/Exit";
 import { LIVING_ROOM_ID, OUTSIDE_HOUSE_ID } from "./room-ids";
 
+const ID = LIVING_ROOM_ID;
+
 export class LivingRoom extends Room {
     constructor(state) {
-        super(LIVING_ROOM_ID, state, (objects, stateReader) => {
-            objects.push(new Exit(SOUTH, OUTSIDE_HOUSE_ID, this.id));
+        super(ID, state, (objects, stateReader) => {
+            objects.push(new Exit("LivingRoom-Exit1", state, SOUTH, OUTSIDE_HOUSE_ID, ID));
         });
     }
 

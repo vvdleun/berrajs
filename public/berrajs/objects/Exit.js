@@ -1,5 +1,5 @@
-import { SetActiveRoomEvent } from "../events/SetActiveRoomEvent";
-import { GameObject } from "./BerraObject";
+import { SetActiveRoomEvent } from "../events/SetActiveRoomEvent.js";
+import { GameObject } from "../core/BerraObject.js";
 
 // Default directions
 export const NORTH = "North";
@@ -16,7 +16,8 @@ export class Exit extends GameObject {
     #toRoomId = null;
     #fromRoomId = null;
 
-    constructor(direction, toRoomId, fromRoomId) {
+    constructor(id, state, direction, toRoomId, fromRoomId) {
+        super(id, state);
         this.#direction = direction;
         this.#toRoomId = toRoomId;
         this.#fromRoomId = fromRoomId;

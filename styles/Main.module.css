@@ -1,0 +1,48 @@
+.container {
+  padding: 0.1em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-height: calc(100vh - 50px);
+}
+
+.output {
+  flex-basis: 100%;
+  flex: 0.50;
+  background-color: rgb(215, 221, 221);
+}
+.actions {
+  flex-basis: 100%;
+  flex: 0.50;
+  background-color: lightgray;
+}
+
+/* @media screen and (min-width: 600px) {
+  .output {
+    flex: 0.4;
+  }
+  .actions {
+    flex: 0.2;
+  }
+} */
+
+/* @media screen and (max-width: 1000px) {
+  .output {
+    flex: 0.6;
+  }
+  .actions {
+    flex: 0.4;
+  }
+} */
+
+/* @media screen and (min-width: 1200px) {
+  .output {
+    flex: 0.66;
+  }
+  .actions {
+    flex: 0.33;
+  }
+} */

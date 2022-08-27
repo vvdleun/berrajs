@@ -1,4 +1,4 @@
-import { Event } from "../core/Event";
+import { Event } from "../core/Event.js";
 
 export class SetActiveRoomEvent extends Event {
     constructor(fromRoomId, toRoomId) {

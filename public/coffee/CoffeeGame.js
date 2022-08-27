@@ -4,16 +4,17 @@ import { LivingRoom } from "./rooms/LivingRoom";
 import { OutsideHouse } from "./rooms/OutsideHouse";
 import { LIVING_ROOM_ID } from "./rooms/room-ids";
 
+const GAME_ID = "cofv1";
+const GAME_TITLE = "Coffee - The Adventure Game";
+const START_ROOM_ID = LIVING_ROOM_ID;
+
 export class CoffeeGame extends Game {
-    static #GAME_TITLE = "Coffee Adventure Game (Powered by Berra.js Adventure Game Engine)";
-    static #START_ROOM_ID = LIVING_ROOM_ID;
-
     constructor() {
-        super(CoffeeGame.#GAME_TITLE, (roomPopulators, objectPopulators, turn) => {
-            roomPopulators.push(state => new LivingRoom(state));
-            roomPopulators.push(state => new OutsideHouse(state));
+        super(GAME_ID, GAME_TITLE, (rooms, objects, initialTurn, state) => {
+            rooms.push(new LivingRoom(state));
+            rooms.push(new OutsideHouse(state));
 
-            turn.addEvent(new SetActiveRoomEvent(null, CoffeeGame.#START_ROOM_ID));
+            initialTurn.addEvent(new SetActiveRoomEvent(null, START_ROOM_ID));
         });
     }
  }
