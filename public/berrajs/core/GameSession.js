@@ -1,8 +1,10 @@
+import { ACTION_WALK_ID } from "./impl/actionIds";
 import { RoomActionCollector } from "./impl/RoomActionCollector";
 import { StateInitializer } from "./impl/StateInitializer";
 import { GlobalStateReader } from "./impl/StateReaders";
 import { GlobalStateWriter } from "./impl/StateWriters";
 import { TurnProcessor } from "./impl/TurnProcessor";
+import { Turn } from "./Turn";
 
 /** 
  * An active gaming session: the bridge between the front-end and the gaming engine.
@@ -31,7 +33,7 @@ export class GameSession {
 
         const state = StateInitializer.createNewState();
 
-        // Bad design alarm: mutates properties of this class!
+        // Bad design alarm: mutates properties...
         this.#running = false;
         this.#stateReader = new GlobalStateReader(state);
         this.#stateWriter = new GlobalStateWriter(state);
@@ -68,23 +70,50 @@ export class GameSession {
         this.#running = false;
     }
 
+    action(msg) {
+        console.log(msg);
+        const roomId = this.#stateReader.roomId();
+        const room = this.#game.rooms[roomId];
+        const objects = room.objects()
+            .filter(obj => obj.id === msg.objectIds[0]);
+
+        if(objects.length !== 1) {
+            throw `Object with id ${msg.objectIds[0]} not found in ${roomId}`;
+        }
+
+        const turn = new Turn()
+        if(msg.action === ACTION_WALK_ID) {
+            objects[0].walk().forEach(event => turn.addEvent(event));
+        } else {
+            throw "Unknown action: " + msg.action;
+        }
+
+        this.#compute(turn);
+    }
+
     #compute(turn) {
-        TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler);
-        this.#updateActions();
+        this.#processTurnAndUpdateRoomName(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler));
     }
 
     #undo(turn) {
-        TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler);
-        this.#updateActions();
+        this.#processTurnAndUpdateRoomName(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler));
     }
 
-    #updateActions() {
-        // Inform subscribers of the available actions in the current room's current state
-        const roomId = this.#stateReader.roomId();
-        const room = this.#game.rooms[roomId];
+    #processTurnAndUpdateRoomName(turnProcessorCallback) {
+        const oldRoomId = this.#stateReader.roomId();
+        const oldRoomName = (oldRoomId && this.#game.rooms[oldRoomId].name()) || "";
 
-        const actions = RoomActionCollector.collectSupportedActionsPerObject(room);
+        turnProcessorCallback();
 
+        const newRoomId = this.#stateReader.roomId();
+        const newRoom = this.#game.rooms[newRoomId];
+        const newRoomName = newRoom.name();
+
+        if(oldRoomName !== newRoomName) {
+            this.#outputHandler.updateRoomName(newRoomName);
+        }
+
+        const actions = RoomActionCollector.collectSupportedActionsPerObject(newRoom);
         this.#outputHandler.updateActions(actions);
-    }
+    }    
 }

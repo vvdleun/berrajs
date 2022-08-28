@@ -1,30 +1,16 @@
+import { ACTION_NAMES, ACTION_TALK_ID, ACTION_USE_ID, ACTION_WALK_ID, ALL_ACTION_IDS } from "./actionIds";
+
 export class RoomActionCollector {
 
     static collectSupportedActionsPerObject(room) {
         // Determine which events are supported by the current objects in the given room.
-        const actions = {
-            walk: {
-                "name": "Walk",
-                "objects": []
-            },
-            examine: {
-                "name": "Examine",
-                "objects": []
-            },
-            talk: {
-                "name": "Talk",
-                "objects": []
-            },
-            pickUp: {
-                "name": "Pick Up",
-                "objects": []
-            },
-            use: {
-                "name": "Use",
-                "objects": []
-            },
-        };
-
+        const actions = {};
+        ALL_ACTION_IDS.forEach(actionId => {
+            actions[actionId] = {
+                name: ACTION_NAMES[actionId],
+                objects: []
+            };
+        })
         room.objects().forEach(o => {
             const receiverObject = {
                 id: o.id,
@@ -32,17 +18,17 @@ export class RoomActionCollector {
             };
 
             if(o.walkable()) {
-                actions.walk.objects.push(receiverObject);
+                actions[ACTION_WALK_ID].objects.push(receiverObject);
             }
             if(o.examinable()) {
-                actions.examine.objects.push(receiverObject);
+                actions[EXAMINE].objects.push(receiverObject);
             }
             if(o.talks()) {
-                actions.talk.objects.push(receiverObject);
+                actions[ACTION_TALK_ID].objects.push(receiverObject);
             }
             if(o.pickable()) {
                 // TODO on which objects?
-                actions.use.objects.push(receiverObject);
+                actions[ACTION_USE_ID].objects.push(receiverObject);
             } 
         });
 

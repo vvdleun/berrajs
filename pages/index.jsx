@@ -1,6 +1,7 @@
 import Head from 'next/head'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ActionMenu from '../components/ActionMenu.jsx';
+import GameOutput from '../components/GameOutput.jsx';
 import HeaderBar from '../components/HeaderBar.jsx'
 import { BerraEngine } from '../public/berrajs/BerraEngine.js';
 import { CoffeeGame } from '../public/coffee/CoffeeGame.js';
@@ -11,13 +12,17 @@ export default function Main() {
   const [title, setTitle] = useState(null);
   const [actions, setActions] = useState([]);
   const [msg, setMsg] = useState("");
-  const currentMsg = useRef("");
-	const gameSession = useRef(null);
+  const [roomName, setRoomName] = useState("");
+  const [selectedAction, setSelectedAction] = useState({});
 
+  const currentMsg = useRef("");    // Keeps reference to text as last logged in GameOutput 
+	const gameSession = useRef(null); // The bridge between the Berra.js Engine and React
+
+  // Initalize callback that will handle all incoming messages from the engine
   useEffect(() => {
     const engine = new BerraEngine();
 
-    // Necessary during debugging 
+    // Necessary during debugging Next.js apps (it can refresh twice)
     currentMsg.current = "";
 
     function reactOutputHandler(msg) {
@@ -32,6 +37,8 @@ export default function Main() {
         setMsg(currentMsg.current);
       } else if(msg.event === 'updateActions') {
         setActions(msg.value);
+      } else if(msg.event === 'updateRoomName') {
+        setRoomName(msg.value);
       } else {
         throw "Unimplemented output handler action: " + msg.event;
       }
@@ -46,25 +53,46 @@ export default function Main() {
     setTitle(game.title);
     setInitializing(false);
 
-    return () => engine.unsubscribeOutputHandler(reactOutputHandler);
+    return () => { 
+      console.log("Unsubscribing...");
+      engine.unsubscribeOutputHandler(reactOutputHandler);
+    }
   }, []);
 
+  // selectedAction will be filled with action id and object ids, when the user has selected an action 
+  // in the ActionMenu component.
+  useMemo(() => {
+    if(selectedAction && gameSession.current) {
+      gameSession.current.action(selectedAction);
+      setSelectedAction(null);
+    }
+  }, [selectedAction])
+
+  if(initializing) {
+    return "Loading, please wait...";
+  }
+
   return (
-    initializing ?
-     "Loading, please wait..."
-     : <div className={styles.container}>
+    <div className={styles.container}>
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.container}>
-        <HeaderBar title={title} />
+        <HeaderBar roomName={roomName} />
         <div className={styles.row}>
-          <div className={styles.output} dangerouslySetInnerHTML={{ __html: msg }}>
+          <div className={styles.output}>
+            <GameOutput msg={msg} />
           </div>
           <div className={styles.actions}>
-            <ActionMenu actions={actions} />
+            <ActionMenu
+                actions={actions}
+                onChangeAction={(actionId, objectId) => { 
+                  const action = { "action": actionId, "objectIds": [objectId]};
+                  setSelectedAction(action)
+                }}
+            />
           </div>
         </div>
       </main>

@@ -1,3 +1,41 @@
 .actions {
     color: black;
 }
+
+.container {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.grid {
+    display: grid;
+    grid-row-gap: 5px;
+    padding: 30px;
+}
+
+.actionButton {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.actionButtonDisabled {
+    background-color: #cccccc;
+    border: none;
+    color: #79797979;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 20px;
+    width: 100%;
+}

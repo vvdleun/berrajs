@@ -1,38 +1,7 @@
 import { GameSession } from "./core/GameSession.js";
-import { OutputHandler } from "./OutputHandler";
+import { DefaultOutputHandler } from "./DefaultOutputHandler.js";
 
-// Routes output events to all subscribed handlers 
-class OutputHandlerRouter extends OutputHandler {
-    #outputHandlers = [];
-
-    constructor(outputHandlers) {
-        super();
-        this.#outputHandlers = outputHandlers;
-    }
-
-    printLine(line) {
-        this.#routeToSubscribers(h => h({ "event": "printLine", "value": line }));
-    }
-
-    printBold(line) {
-        this.#routeToSubscribers(h => h({ "event": "printBold", "value": line }));
-    }
-
-    print(line) {
-        this.#routeToSubscribers(h => h({ "event": "print", "value": line }));
-    }
-
-    updateActions(actions) {
-        this.#routeToSubscribers(h => h({ "event": "updateActions", "value": actions }));
-    }
-
-    #routeToSubscribers(cb) {
-        this.#outputHandlers.forEach(h => {
-            cb(h);
-        });
-    }
-}
-
+// The Berra.js engine is written in vanilla JavaScript code and is, by design, UI-front-end technology agnostic.
 export class BerraEngine {
     #outputHandlers = [];
 
@@ -46,7 +15,7 @@ export class BerraEngine {
     }
     
     start(game) {
-        const outputHandler = new OutputHandlerRouter(this.#outputHandlers);
+        const outputHandler = new DefaultOutputHandler(this.#outputHandlers);
 
         const session = new GameSession(game, outputHandler);
 

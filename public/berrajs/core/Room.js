@@ -7,14 +7,18 @@ export class Room {
     #stateReader;
     #objects = [];
 
-    constructor(id, state, objectPopulator) {
+    constructor(id, state, roomPopulator) {
         this.id = id;
         this.#stateReader = new StateReader(state, id);
-        objectPopulator(this.#objects, this.#stateReader);
+        roomPopulator(this.#objects, this.#stateReader);
     }
 
     name() {
         return "Room without a name";
+    }
+
+    intro() {
+        return "";
     }
 
     description() {
