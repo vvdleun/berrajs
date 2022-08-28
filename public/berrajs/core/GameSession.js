@@ -1,4 +1,4 @@
-import { ACTION_WALK_ID } from "./impl/actionIds";
+import { ACTION_EXAMINE_ID, ACTION_WALK_ID } from "./impl/actionIds";
 import { RoomActionCollector } from "./impl/RoomActionCollector";
 import { StateInitializer } from "./impl/StateInitializer";
 import { GlobalStateReader } from "./impl/StateReaders";
@@ -71,7 +71,6 @@ export class GameSession {
     }
 
     action(msg) {
-        console.log(msg);
         const roomId = this.#stateReader.roomId();
         const room = this.#game.rooms[roomId];
         const objects = room.objects()
@@ -84,6 +83,8 @@ export class GameSession {
         const turn = new Turn()
         if(msg.action === ACTION_WALK_ID) {
             objects[0].walk().forEach(event => turn.addEvent(event));
+        } else if(msg.action === ACTION_EXAMINE_ID) {
+            objects[0].examine().forEach(event => turn.addEvent(event));
         } else {
             throw "Unknown action: " + msg.action;
         }
@@ -92,11 +93,11 @@ export class GameSession {
     }
 
     #compute(turn) {
-        this.#processTurnAndUpdateRoomName(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler));
+        this.#processTurnAndUpdateRoomName(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler, this.#game));
     }
 
     #undo(turn) {
-        this.#processTurnAndUpdateRoomName(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler));
+        this.#processTurnAndUpdateRoomName(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler, this.#game));
     }
 
     #processTurnAndUpdateRoomName(turnProcessorCallback) {

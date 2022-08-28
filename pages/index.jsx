@@ -54,15 +54,14 @@ export default function Main() {
     setInitializing(false);
 
     return () => { 
-      console.log("Unsubscribing...");
       engine.unsubscribeOutputHandler(reactOutputHandler);
     }
   }, []);
 
   // selectedAction will be filled with action id and object ids, when the user has selected an action 
   // in the ActionMenu component.
-  useMemo(() => {
-    if(selectedAction && gameSession.current) {
+  useEffect(() => {
+    if(selectedAction && Object.keys(selectedAction).length > 0 && gameSession.current) {
       gameSession.current.action(selectedAction);
       setSelectedAction(null);
     }
