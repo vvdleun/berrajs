@@ -1,5 +1,8 @@
 import { SetActiveRoomEvent } from "../events/SetActiveRoomEvent.js";
 import { GameObject } from "../core/BerraObject.js";
+import { PrintRoomIntroEvent } from "../events/PrintRoomIntroEvent.js";
+import { PrintLineEvent } from "../events/PrintLineEvent.js";
+import { PrintBoldEvent } from "../events/PrintBoldEvent.js";
 
 // Default directions
 export const NORTH = "North";
@@ -32,6 +35,11 @@ export class Exit extends GameObject {
     }
 
     walk() {
-       return [new SetActiveRoomEvent(this.#fromRoomId, this.#toRoomId)];
+       return [
+        new PrintBoldEvent("> " + this.#direction.toUpperCase()),
+        new PrintLineEvent(""),
+        new SetActiveRoomEvent(this.#fromRoomId, this.#toRoomId),
+        new PrintRoomIntroEvent(this.#toRoomId)
+      ];
     }
 }

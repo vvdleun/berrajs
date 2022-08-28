@@ -18,7 +18,7 @@ export class LivingRoom extends Room {
     }
 
     intro() {
-        return "Your smart-lock recognized your phone. You enter your house via the front door.";
+        return "Your smart-lock recognized your phone. You enter your house via the front door and rush yourself to your kitchen.";
     }
 
     description() {

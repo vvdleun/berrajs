@@ -1,4 +1,4 @@
-import { ACTION_NAMES, ACTION_TALK_ID, ACTION_USE_ID, ACTION_WALK_ID, ALL_ACTION_IDS } from "./actionIds";
+import { ACTION_EXAMINE_ID, ACTION_NAMES, ACTION_TALK_ID, ACTION_USE_ID, ACTION_WALK_ID, ALL_ACTION_IDS } from "./actionIds";
 
 export class RoomActionCollector {
 
@@ -21,7 +21,7 @@ export class RoomActionCollector {
                 actions[ACTION_WALK_ID].objects.push(receiverObject);
             }
             if(o.examinable()) {
-                actions[EXAMINE].objects.push(receiverObject);
+                actions[ACTION_EXAMINE_ID].objects.push(receiverObject);
             }
             if(o.talks()) {
                 actions[ACTION_TALK_ID].objects.push(receiverObject);

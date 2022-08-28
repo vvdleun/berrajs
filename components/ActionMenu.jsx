@@ -67,8 +67,8 @@ export default function ActionMenu({ actions, onChangeAction }) {
                                                 disabled={false}
                                                 data={o}
                                                 cb={ data => {
-                                                    onChangeAction(actionId, data.id);
                                                     setMode(MODE_CHOOSE_ACTION);
+                                                    onChangeAction(actionId, data.id);
                                                 }}
                                         />)
                     )

@@ -1,10 +1,11 @@
 export class TurnProcessor {
-    static compute(turn, stateWriter, outputHandler) {
+    static compute(turn, stateWriter, outputHandler, game) {
         if(turn.isComputed()) {
             throw "Internal error: Turn was already computed!";
         }
+
         turn.events().forEach(event => {
-            event.doEvent(stateWriter, outputHandler);
+            event.doEvent(stateWriter, outputHandler, game);
         });
         turn.toggleComputed();
     }

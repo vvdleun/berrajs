@@ -6,10 +6,6 @@ export class DefaultOutputHandler {
         this.#outputHandlers = outputHandlers;
     }
 
-    debug() {
-        console.log(this.#outputHandlers);
-    }
-
     // Update actions recognized in current's room's state
     updateActions(actions) {
         this.#sendMsg({"event": "updateActions", "value": actions});
