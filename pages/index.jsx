@@ -68,7 +68,7 @@ export default function Main() {
       // (TODO: give option to pin object menu)
       setSelectedAction(null);
     }
-  }, [   ])
+  }, [selectedAction])
 
   if(initializing) {
     return <p>Loading, please wait...</p>;

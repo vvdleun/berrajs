@@ -1,14 +1,17 @@
 import { Event } from "../core/Event.js";
 
 export class SetActiveRoomEvent extends Event {
-    constructor(fromRoomId, toRoomId) {
+    constructor(toRoomId, fromRoomId) {
         super(
-            (stateWriter, outputHandler) => {
+            (stateWriter, outputHandler, context) => {
                 // Do action
                 stateWriter.setActiveRoomId(toRoomId);
             },
-            (stateWriter, outputHandler) => {
+            (stateWriter, outputHandler, context) => {
                 // Undo action
+                if(!fromId) {
+                    throw "Cannot undo setActiveRoomEvent: fromRoomId was not specified";
+                }
                 stateWriter.setActiveRoomId(fromRoomId);
             }
         )

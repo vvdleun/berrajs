@@ -8,31 +8,31 @@ export class StaticObject extends GameObject {
     #examineMsg
 
     constructor(id, name, examineMsg) {
-        super(id, null);
+        super(id);
         this.#name = name;
         this.#examineMsg = examineMsg;
     }
 
-    name() {
+    name(context) {
         return this.#name;
     }
 
-    examinable() {
+    examinable(context) {
         return true;
     }
 
-    examineBefore() {
+    examineBefore(context) {
         return [];
     }
 
-    examine() {
+    examine(context) {
         return [ 
             new PrintBoldEvent("> " + ACTION_NAMES[ACTION_EXAMINE_ID].toUpperCase() + " " +  this.#name.toUpperCase()),
             new PrintLineEvent(""),
             new PrintLineEvent(this.#examineMsg) ];
     }
 
-    examineAfter() {
+    examineAfter(context) {
         return [];
     }
 }

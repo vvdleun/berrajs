@@ -1,6 +1,5 @@
 import { SetActiveRoomEvent } from "../events/SetActiveRoomEvent.js";
 import { GameObject } from "../core/BerraObject.js";
-import { PrintRoomIntroEvent } from "../events/PrintRoomIntroEvent.js";
 import { PrintLineEvent } from "../events/PrintLineEvent.js";
 import { PrintBoldEvent } from "../events/PrintBoldEvent.js";
 
@@ -19,27 +18,33 @@ export class Exit extends GameObject {
     #toRoomId = null;
     #fromRoomId = null;
 
-    constructor(id, state, direction, toRoomId, fromRoomId) {
-        super(id, state);
+    constructor(id, direction, toRoomId, fromRoomId) {
+        super(id);
         this.#direction = direction;
         this.#toRoomId = toRoomId;
         this.#fromRoomId = fromRoomId;
     }
 
-    name() {
+    name(context) {
         return this.#direction;
     }
 
-    walkable() {
+    walkable(context) {
         return true;
     }
 
-    walk() {
-       return [
-        new PrintBoldEvent("> " + this.#direction.toUpperCase()),
-        new PrintLineEvent(""),
-        new SetActiveRoomEvent(this.#fromRoomId, this.#toRoomId),
-        new PrintRoomIntroEvent(this.#toRoomId)
-      ];
+    walk(context) {
+        const events = [
+            new PrintBoldEvent("> " + this.#direction.toUpperCase()),
+            new PrintLineEvent(""),
+            new SetActiveRoomEvent(this.#toRoomId, this.#fromRoomId),
+        ];
+
+        const introToRoom = context.rooms()[this.#toRoomId].intro(context);
+        if(introToRoom) {
+            events.push(new PrintLineEvent(introToRoom));
+        }
+
+        return events;
     }
 }

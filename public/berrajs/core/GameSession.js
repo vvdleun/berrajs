@@ -1,3 +1,4 @@
+import { Context } from "./Context";
 import { ACTION_EXAMINE_ID, ACTION_WALK_ID } from "./impl/actionIds";
 import { RoomActionCollector } from "./impl/RoomActionCollector";
 import { StateInitializer } from "./impl/StateInitializer";
@@ -18,6 +19,7 @@ export class GameSession {
     #game;
     #stateReader;
     #stateWriter;
+    #context = null;
     #running = false;
     #outputHandler = null;
 
@@ -37,8 +39,9 @@ export class GameSession {
         this.#running = false;
         this.#stateReader = new GlobalStateReader(state);
         this.#stateWriter = new GlobalStateWriter(state);
+        this.#context = new Context(state, this.#game);
 
-        this.#game.initialize(state);
+        this.#game.initialize(this.#stateReader);
 
         this.#compute(this.#game.initTurn);
 
@@ -73,34 +76,40 @@ export class GameSession {
     action(msg) {
         const roomId = this.#stateReader.roomId();
         const room = this.#game.rooms[roomId];
-        const objects = room.objects()
+        const roomObjects = room.objects()
             .filter(obj => obj.id === msg.objectIds[0]);
 
-        if(objects.length !== 1) {
+        if(roomObjects.length !== 1) {
             throw `Object with id ${msg.objectIds[0]} not found in ${roomId}`;
         }
 
-        const turn = new Turn()
+        const roomObject = roomObjects[0];
+
+        // TODO move this logic to a TurnProcessor-alike class
+        var events = null;
         if(msg.action === ACTION_WALK_ID) {
-            objects[0].walk().forEach(event => turn.addEvent(event));
+            events = roomObject.walk(this.#context);
         } else if(msg.action === ACTION_EXAMINE_ID) {
-            objects[0].examine().forEach(event => turn.addEvent(event));
+            events = roomObject.examine(this.#context);
         } else {
             throw "Unknown action: " + msg.action;
         }
+
+        const turn = new Turn();
+        events.forEach(event => turn.addEvent(event))
 
         this.#compute(turn);
     }
 
     #compute(turn) {
-        this.#processTurnAndUpdateRoomName(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler, this.#game));
+        this.#processTurnAndHandleOutputEvents(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler, this.#context));
     }
 
-    #undo(turn) {
-        this.#processTurnAndUpdateRoomName(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler, this.#game));
+    #undo(turn, context) {
+        this.#processTurnAndHandleOutputEvents(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler, this.#context));
     }
 
-    #processTurnAndUpdateRoomName(turnProcessorCallback) {
+    #processTurnAndHandleOutputEvents(turnProcessorCallback) {
         const oldRoomId = this.#stateReader.roomId();
         const oldRoomName = (oldRoomId && this.#game.rooms[oldRoomId].name()) || "";
 

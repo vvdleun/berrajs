@@ -5,7 +5,6 @@ import { PrintLineEvent } from "../berrajs/events/PrintLineEvent";
 import { SetActiveRoomEvent } from "../berrajs/events/SetActiveRoomEvent";
 import { LivingRoom } from "./rooms/LivingRoom";
 import { OutsideHouse } from "./rooms/OutsideHouse";
-import { OUTSIDE_HOUSE_ID } from "./rooms/room-ids";
 
 const GAME_ID = "coffee1-v1";
 const GAME_TITLE = "Coffee - The Adventure Game";
@@ -15,13 +14,13 @@ export class CoffeeGame extends Game {
         super(GAME_ID, GAME_TITLE);
     }
 
-    loadGame(rooms, objects, initialTurn, state) {
-        const startRoom = new OutsideHouse(state);
+    initializeGame(rooms, objects, initialTurn, stateReader) {
+        const startRoom = new OutsideHouse();
 
-        rooms.push(new LivingRoom(state));
         rooms.push(startRoom);
+        rooms.push(new LivingRoom());
 
-        initialTurn.addEvent(new SetActiveRoomEvent(null, startRoom.id));
+        initialTurn.addEvent(new SetActiveRoomEvent(startRoom.id));
         initialTurn.addEvent(new PrintEvent("Welcome to "));
         initialTurn.addEvent(new PrintBoldEvent(GAME_TITLE));
         initialTurn.addEvent(new PrintLineEvent("!"));
@@ -36,6 +35,6 @@ export class CoffeeGame extends Game {
         initialTurn.addEvent(new PrintLineEvent(" (graphical artist for version 2)."));
         initialTurn.addEvent(new PrintLineEvent("Now your adventure begins."));
         initialTurn.addEvent(new PrintLineEvent("After a long stressing day you are finally home. Dying, figuratively speaking, for a nice cup of coffee."));
-        initialTurn.addEvent(new PrintLineEvent(startRoom.intro()));
+        initialTurn.addEvent(new PrintLineEvent(startRoom.intro(stateReader)));
     };
  }

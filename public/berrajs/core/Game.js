@@ -1,34 +1,39 @@
+import { GlobalStateReader } from "./impl/StateReaders";
 import { Turn } from "./Turn";
 
 export class Game {
     id = null;
     title = null;
-    rooms = {};            // Maps roomId to room
-    objects = {};          // maps objectId to object
-    initTurn = null;       // Contains events that initalize the game
+    rooms = {};            // Maps room.id to Room object
+    objects = {};          // maps object.id to BerraObject object
+    initTurn = null;       // Contains events that are used to initalize the game
 
     constructor(id, title) {
         this.id = id;
         this.title = title;
     }
 
-    initialize(state) {
+    initialize(stateReader) {
         const rooms = [];
         const objects = [];
-        const initialTurn = new Turn(state);
+        const initialTurn = new Turn();
 
-        this.loadGame(rooms, objects, initialTurn, state);
+        this.initializeGame(rooms, objects, initialTurn, stateReader);
+
+        // Initalize rooms
+        // TODO initalize objects the same way
+        rooms.forEach(room => room.initialize(stateReader));
 
         this.rooms = this.#toMap(rooms);
         this.objects = this.#toMap(objects);
-        this.initTurn = initialTurn;
+        this.initTurn = initialTurn;          
     }
 
-    loadGame(rooms, objects, initialTurn, state) {
+    initializeGame(rooms, objects, initialTurn, stateReader) {
         throw "This method must be implemented in the game";
     }
 
-    #toMap(list) {
+     #toMap(list) {
         return list.reduce((map, item) => {
             map[item.id] = item;
             return map;

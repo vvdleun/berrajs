@@ -1,122 +1,124 @@
 export class GameObject {
     id = "";
-    state = null
 
-    constructor(id, state) {
+    constructor(id) {
         this.id = id;
-        this.state = state;
     }
 
-    name() {
+    initialize(context) {
+
+    }
+
+    name(context) {
         return "Object without a name";
     }
 
     // WALK
 
-    walkable() {
+    walkable(context) {
         return false;
     }
 
-    walkBefore() {
+    walkBefore(context) {
         return [];
     }
 
-    walk() {
+    walk(context) {
         return [];
     }
     
-    walkAfter() {
+    walkAfter(context) {
         return [];
     }
 
     // EXAMINE
 
-    examinable() {
+    examinable(context) {
         return false;
     }
 
-    examineBefore() {
+    examineBefore(context) {
         return [];
     }
 
-    examine() {
+    examine(context) {
         return [];
     }
 
-    examineAfter() {
+    examineAfter(context) {
         return [];
     }
 
     // TALK
 
-    talks() {
+    talks(context) {
         return false;
     }
 
-    talkBefore() {
+    talkBefore(context) {
         return [];
     }
 
-    talk() {
+    talk(context) {
         return [];
     }
 
-    talkAfter() {
+    talkAfter(context) {
         return [];
     }
 
     // PICK UP
 
-    pickable() {
+    pickable(context) {
         return false;
     }
 
-    pickedUpBefore() {
+    pickedUpBefore(context) {
         return [];
     }
 
-    pickedUp() {
+    pickedUp(context) {
         return [];
     }
 
-    pickedUpAfter() {
+    pickedUpAfter(context) {
         return [];   
     }
 
     // USE OBJECT X ON Y
 
     // Is object itself USE-able?
-    usable() {
+    usable(context) {
         return false
     }
 
-    usedBefore(usedObject) {
+    usedBefore(usedObject, context) {
         return [];
     }
 
-    used(usedObject) {
+    used(usedObject, context) {
         return [];
     }
 
-    usedAfter(usedObject) {
+    usedAfter(usedObject, context) {
         return [];
     }
 
     // Given object is used on this object
 
-    canUseObject(usedObject) {
+    canUseObject(usedObject, context) {
         return false
     }
 
-     useObjectBefore(usedObject) {
+     useObjectBefore(usedObject, context) {
         return [];
     }
 
-    useObject(usedObject) {
+    useObject(usedObject, context) {
         return [];
     }
 
-    useObjectAfter(usedObject) {
+    useObjectAfter(usedObject, context) {
         return [];
     }
 }
