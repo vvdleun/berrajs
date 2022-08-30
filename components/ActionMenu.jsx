@@ -46,6 +46,7 @@ export default function ActionMenu({ actions, onChangeAction }) {
                 />
                 {
                     (mode === MODE_CHOOSE_ACTION && 
+                        // Show possible actions
                         Object.entries(actions)
                                 .map(a => 
                                         <ActionButton 
@@ -59,6 +60,9 @@ export default function ActionMenu({ actions, onChangeAction }) {
                                                 }}
                                         />)
                     ) || (mode === MODE_CHOOSE_TARGET &&
+                        // Show possible objects for selected action
+                        // TODO: special object selection screen for WALK (compass...) and USE
+                        //       (inventory objects that can be used on objects in the current room)
                         actions[actionId].objects
                                 .map(o => 
                                         <ActionButton 

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ActionMenu from '../components/ActionMenu.jsx';
 import GameOutput from '../components/GameOutput.jsx';
 import HeaderBar from '../components/HeaderBar.jsx'
@@ -63,12 +63,15 @@ export default function Main() {
   useEffect(() => {
     if(selectedAction && Object.keys(selectedAction).length > 0 && gameSession.current) {
       gameSession.current.action(selectedAction);
+
+      // Reset actions to main actions menu
+      // (TODO: give option to pin object menu)
       setSelectedAction(null);
     }
-  }, [selectedAction])
+  }, [   ])
 
   if(initializing) {
-    return "Loading, please wait...";
+    return <p>Loading, please wait...</p>;
   }
 
   return (
@@ -87,8 +90,9 @@ export default function Main() {
           <div className={styles.actions}>
             <ActionMenu
                 actions={actions}
-                onChangeAction={(actionId, objectId) => { 
-                  const action = { "action": actionId, "objectIds": [objectId]};
+                onChangeAction={(actionId, objectId) => {
+                  // TODO Hard-coded for 1 object id for now.
+                  const action = { "action": actionId, "objectIds": [objectId] };
                   setSelectedAction(action)
                 }}
             />
