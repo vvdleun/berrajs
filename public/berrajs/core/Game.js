@@ -1,4 +1,3 @@
-import { GlobalStateReader } from "./impl/StateReaders";
 import { Turn } from "./Turn";
 
 export class Game {

@@ -2,18 +2,18 @@ import { Context } from "./Context";
 import { ACTION_EXAMINE_ID, ACTION_WALK_ID } from "./impl/actionIds";
 import { RoomActionCollector } from "./impl/RoomActionCollector";
 import { StateInitializer } from "./impl/StateInitializer";
-import { GlobalStateReader } from "./impl/StateReaders";
-import { GlobalStateWriter } from "./impl/StateWriters";
+import { GlobalStateReader } from "./impl/StateReader";
+import { GlobalStateWriter } from "./impl/StateWriter";
 import { TurnProcessor } from "./impl/TurnProcessor";
 import { Turn } from "./Turn";
 
 /** 
  * An active gaming session: the bridge between the front-end and the gaming engine.
  * 
- * The front-end communicates with the GameSession object by providing InputAction objects.
- * The session searches for the object that must handle the action, call the appropiate object's methods
- * and the session will collect the events and compute the turn. It will fire a callback, that the front-end
- * can subscribe to update the visual state.
+ * The front-end communicates with the GameSession object by passing messages by calling the "action()" method.
+ * The session searches for the current room's object that must handle the action, call the appropiate object's methods
+ * and the session will collect the events and compute the turn. During processing of the turn, the engine will fire
+ * various events (that the front-end can subscribe to when setting up the BerraEngine).
  */
 export class GameSession {
     #game;
@@ -48,23 +48,6 @@ export class GameSession {
         this.#running = true;
     }
 
-    pauseGame() {
-        if(!this.#running) {
-            throw "Game is not running, cannot pause game";
-        }
-
-        // It is a turn-based engine, so assume there are no timers for now :-)
-        this.#running = false;
-    }
-
-    continueGame() {
-        if(this.#running) {
-            throw "Game is already running, cannot unpause game";
-        }
-
-        this.#running = true;
-    }
-
     stopGame() {
         if(!this.#running) {
             throw "Game was already stopped";
@@ -73,9 +56,12 @@ export class GameSession {
         this.#running = false;
     }
 
+    // Front-end calls this method to communicate about UI actions taken by the user
+    // msg: { "action": "walk", objectIds:[ "allYourBaseId" ]}
     action(msg) {
-        const roomId = this.#stateReader.roomId();
-        const room = this.#game.rooms[roomId];
+        const context = this.#context;
+
+        const room = context.room();
         const roomObjects = room.objects()
             .filter(obj => obj.id === msg.objectIds[0]);
 
@@ -88,9 +74,9 @@ export class GameSession {
         // TODO move this logic to a TurnProcessor-alike class
         var events = null;
         if(msg.action === ACTION_WALK_ID) {
-            events = roomObject.walk(this.#context);
+            events = roomObject.walk(context);
         } else if(msg.action === ACTION_EXAMINE_ID) {
-            events = roomObject.examine(this.#context);
+            events = roomObject.examine(context);
         } else {
             throw "Unknown action: " + msg.action;
         }
@@ -105,19 +91,20 @@ export class GameSession {
         this.#processTurnAndHandleOutputEvents(() => TurnProcessor.compute(turn, this.#stateWriter, this.#outputHandler, this.#context));
     }
 
-    #undo(turn, context) {
+    #undo(turn) {
         this.#processTurnAndHandleOutputEvents(() => TurnProcessor.undo(turn, this.#stateWriter, this.#outputHandler, this.#context));
     }
 
     #processTurnAndHandleOutputEvents(turnProcessorCallback) {
-        const oldRoomId = this.#stateReader.roomId();
-        const oldRoomName = (oldRoomId && this.#game.rooms[oldRoomId].name()) || "";
+        const context = this.#context;
+
+        const oldRoom = context.room();
+        const oldRoomName = (oldRoom && oldRoom.name(context)) || "";
 
         turnProcessorCallback();
 
-        const newRoomId = this.#stateReader.roomId();
-        const newRoom = this.#game.rooms[newRoomId];
-        const newRoomName = newRoom.name();
+        const newRoom = context.room();
+        const newRoomName = newRoom.name(context);
 
         if(oldRoomName !== newRoomName) {
             this.#outputHandler.updateRoomName(newRoomName);

@@ -4,7 +4,7 @@ I developed my first, rather crude/primitive, text adventures in BASIC, when I w
 
 Now, "some" years later, I'd like to try my hand at an adventure/interactive fiction game again.
 
-I looked for an existing engine that would statify my needs,
+I looked for an existing engine that would statisfy my needs,
 but I could not find any web-based engine that met my requirements, so I decided to code my own. Yes, _another custom interactive fiction engine that nobody asked for!_
 
 It is powered by Next.js (and therefore, React), although the engine itself is written in vanilla JS, without any external dependencies (except that it requires modern ECMAScript features to run). A React app is built on top of it, that basically handles input and output events.

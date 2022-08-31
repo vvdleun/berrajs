@@ -15,15 +15,15 @@ export class LivingRoom extends Room {
         objects.push(new Exit("LivingRoom-Exit1", LEAVE_HOUSE_DIRECTION, OUTSIDE_HOUSE_ID, ID));
     }
 
-    name(stateReader) {
+    name(context) {
         return "Living room (inside house)";
     }
 
-    intro(stateReader) {
+    intro(context) {
         return "Your smart-lock recognized your phone. You enter your house via the front door and rush yourself to your kitchen.";
     }
 
-    description(stateReader) {
+    description(context) {
         return "You are standing in your living room. A coffee machine is sitting on the kitchen's counter.";
     }
 }

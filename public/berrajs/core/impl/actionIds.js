@@ -1,9 +1,12 @@
+// TODO implement "custom" actions
 export const ACTION_WALK_ID = 'walk';
 export const ACTION_EXAMINE_ID = 'examine';
 export const ACTION_TALK_ID = 'talk';
 export const ACTION_PICK_UP_ID = 'pick_up';
 export const ACTION_USE_ID = 'use';
 
+// Default action names
+// TODO make mechanism game can overrule those
 const actionNames = {};
 actionNames[ACTION_WALK_ID] = "Walk"; 
 actionNames[ACTION_EXAMINE_ID] = "Examine";

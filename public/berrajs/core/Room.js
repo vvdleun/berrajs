@@ -16,27 +16,27 @@ export class Room {
         throw "initalizeRoom must be implemented by child class";
     }
 
-    name(stateReader) {
+    name(context) {
         return "Room without a name";
     }
 
-    intro(stateReader) {
+    intro(context) {
         return null;
     }
 
-    description(stateReader) {
+    description(context) {
         return "Room without a description";
     }
 
-    enterBefore(stateReader) {
+    enterBefore(context) {
         return false;
     }
 
-    enter(stateReader) {
+    enter(context) {
         return [];
     }
 
-    enterAfter(stateReader) {
+    enterAfter(context) {
         return [];
     }
 
