@@ -12,7 +12,7 @@ export class LivingRoom extends Room {
     }
 
     initializeRoom(stateReader, objects) {
-        objects.push(new Exit("LivingRoom-Exit1", LEAVE_HOUSE_DIRECTION, OUTSIDE_HOUSE_ID, ID));
+        objects.push(new Exit("#Exit1", LEAVE_HOUSE_DIRECTION, OUTSIDE_HOUSE_ID, ID));
     }
 
     name(context) {

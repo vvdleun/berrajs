@@ -1,0 +1,10 @@
+Some random ideas for consideration:
+* Add rooms to individual "Maps", so that rooms within a Map are cross-linked automatically
+    (i.e. first create Map("House), then add first room "Living room", then add room("Kitchen", NORTH))
+    and living room is then automatically linked to the kitchen room and vice/versa).
+
+    Rooms still have the ability to add custom Exits to themselves via the initializeRoom() method.
+
+* Add special "Map" action, that draws current map with previously visited rooms (and clearly mark unvisted directions)
+
+* Make the engine more data-driven, everything now happens in code

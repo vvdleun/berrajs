@@ -14,19 +14,19 @@ export class GlobalStateReader {
     }
 
     roomState(id, key) {
-        return this.allRoomState(id)[key];
-    }
-
-    allRoomState(id) {
-        return this.state.rooms[id];
+        const roomState = this.state.rooms[id];
+        if(!key) {
+            return roomState;
+        }
+        return roomState[key];
     }
 
     objectState(id, key) {
-        return this.allObjectState(id)[key];
-    }
-
-    allObjectState(id) {
-        return this.state.objects[id];
+        const objectState = this.state.objects[id];
+        if(!key) {
+            return objectState;
+        }
+        return objectState[key];
     }
 }
 
