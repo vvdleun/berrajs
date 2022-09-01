@@ -1,6 +1,6 @@
 Some random ideas for consideration:
-* Add rooms to individual "Maps", so that rooms within a Map are cross-linked automatically
-    (i.e. first create Map("House), then add first room "Living room", then add room("Kitchen", NORTH))
+* Add a "RoomLinker", so that rooms within a Map can be cross-linked automatically
+    (i.e. first create a RoomLinker, then add the first room "Living room" to it, then add room("Kitchen", NORTH))
     and living room is then automatically linked to the kitchen room and vice/versa).
 
     Rooms still have the ability to add custom Exits to themselves via the initializeRoom() method.
